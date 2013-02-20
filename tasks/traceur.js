@@ -15,7 +15,7 @@ module.exports = function(grunt) {
   var fs = require('fs'), 
       path = require('path');
 
-  grunt.registerMultiTask('traceur', 'Your task description goes here.', function() {
+  grunt.registerMultiTask('traceur', 'Transpile ES6 JavaScript to ES3 JavaScript', function() {
 
     // Allow traceur.js to use importScript.
     global.importScript = importScript;
@@ -25,7 +25,8 @@ module.exports = function(grunt) {
 
     this.files.forEach(function(group){
       var reporter = new traceur.util.ErrorReporter(),
-          project = new traceur.semantics.symbols.Project();
+          project = new traceur.semantics.symbols.Project(),
+          SourceMapGenerator = traceur.outputgeneration.SourceMapGenerator;
 
       console.log(group.dest, group.src);
       group.src.forEach(function(filename){
@@ -53,7 +54,10 @@ module.exports = function(grunt) {
         var options = {
           encoding: 'utf8'
         },
-        tree, source, filename, outputfile;
+        tree, source, filename, outputfile,
+        traceurOptions = {
+
+        };
 
         tree = results.get(file);
         filename = file.name;
