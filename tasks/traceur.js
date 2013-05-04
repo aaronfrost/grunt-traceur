@@ -17,11 +17,7 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('traceur', 'Transpile ES6 JavaScript to ES3 JavaScript', function() {
 
-    // Allow traceur.js to use importScript.
-    global.importScript = importScript;
-    importScript('/lib/traceur.js');
-    
-
+    var traceur = require('traceur');
 
     this.files.forEach(function(group){
       var reporter = new traceur.util.ErrorReporter(),
@@ -62,7 +58,7 @@ module.exports = function(grunt) {
         tree = results.get(file);
         filename = file.name;
         source = traceur.outputgeneration.TreeWriter.write(tree, false);
-        outputfile = group.dest+file.name;
+        outputfile = group.dest+path.basename(file.name);
         grunt.file.write(outputfile, source, options);
         console.log(outputfile + ' successful.'); 
       });
