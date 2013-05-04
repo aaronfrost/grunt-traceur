@@ -1,7 +1,5 @@
 'use strict';
 
-var grunt = require('grunt');
-
 /*
   ======== A Handy Little Nodeunit Reference ========
   https://github.com/caolan/nodeunit
@@ -22,27 +20,41 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 
+function getType (obj) {
+  return Object.prototype.toString.call(obj)
+}
+
 exports.traceur = {
-  setUp: function(done) {
-    // setup here if necessary
-    done();
-  },
-  default_options: function(test) {
-    test.expect(1);
 
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
-
+  args: function (test) {
+    var func = require('./tmp/args');
+    var result = func(undefined, 1, 2, 3);
+    test.equal(result.a, 100, 'default argument should work');
+    var restType = getType(result.rest);
+    test.equal(restType, '[object Array]', 'rest arguments should be converted to an array')
     test.done();
   },
-  custom_options: function(test) {
-    test.expect(1);
 
-    var actual = grunt.file.read('tmp/custom_options');
-    var expected = grunt.file.read('test/expected/custom_options');
-    test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
-
+  destructuring: function (test) {
+    var vals = require('./tmp/destructuring');
+    test.equal(vals.a, 'This is A', 'destructuring assignment should work');
+    test.equal(vals.b, 'This is B', 'destructuring assignment should work');
     test.done();
   },
+
+  module: function (test) {
+    var a = require('./tmp/module');
+    test.equal(a, 123, 'module and import should work');
+    test.done();
+  },
+
+  class: function (test) {
+    var Man = require('./tmp/class');
+    var name = 'john';
+    var man = new Man(name);
+    var msg = man.hi()
+    test.equal(msg, 'I am a man and my name is ' + name, 'class and inheritance should work')
+    test.done()
+  }
+
 };
