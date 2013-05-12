@@ -15,18 +15,24 @@ module.exports = function(grunt) {
     
     // Configuration to be run (and then tested).
     traceur: {
-      custom: {
-        files:{
-          'build/': ['js/**/*.js']
+      test: {
+        files: {
+          'test/tmp/': ['test/fixtures/*.js']
         }
       },
     },
+
+    nodeunit: {
+      tests: ['test/*_test.js']
+    }
 
   });
 
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
 
-  grunt.registerTask('default', ['traceur']);
+  grunt.loadNpmTasks('grunt-contrib-nodeunit');
+
+  grunt.registerTask('default', ['traceur', 'nodeunit']);
 
 };

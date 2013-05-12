@@ -8,6 +8,13 @@
     "email": "aaronfrost@gmail.com",
     "url": "40win.com"
   },
+  "contributors": [
+    {
+      "name": "Evan You",
+      "email": "yyx990803@gmail.com",
+      "url": "evanyou.me"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/aaronfrost/grunt-traceur.git"
@@ -25,11 +32,15 @@
   "engines": {
     "node": ">=0.8.0"
   },
-  "devDependencies": {
-    "grunt": "~0.4.0"
+  "dependencies": {
+    "traceur": "~0.0.3"
   },
   "peerDependencies": {
     "grunt": "~0.4.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.1.2"
   },
   "keywords": [
     "gruntplugin"
