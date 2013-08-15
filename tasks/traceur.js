@@ -1,6 +1,6 @@
 /*
  * grunt-traceur
- * https://github.com/aaron/grunt
+ * https://github.com/aaronfrost/grunt
  *
  * Copyright (c) 2013 Aaron Frost
  * Licensed under the MIT license.
