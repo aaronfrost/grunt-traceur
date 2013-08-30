@@ -33,7 +33,7 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "traceur": "~0.0.3"
+    "traceur": "~0.0.4"
   },
   "peerDependencies": {
     "grunt": "~0.4.0"
