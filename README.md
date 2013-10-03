@@ -25,6 +25,9 @@ In your project's Gruntfile, add a section named `traceur` to the data object pa
 ```js
 grunt.initConfig({
   traceur: {
+      options: {
+        sourceMaps: true // default: false
+      },
       custom: {
         files:{
           'build/': ['js/**/*.js'] // dest : [source files]

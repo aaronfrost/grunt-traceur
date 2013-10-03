@@ -15,6 +15,9 @@ module.exports = function(grunt) {
     
     // Configuration to be run (and then tested).
     traceur: {
+      options: {
+        sourceMaps: true
+      },
       test: {
         files: {
           'test/tmp/': ['test/fixtures/*.js']

@@ -20,6 +20,9 @@
     test.ifError(value)
 */
 
+var fs = require('fs');
+var path = require('path');
+
 function getType (obj) {
   return Object.prototype.toString.call(obj)
 }
@@ -55,6 +58,15 @@ exports.traceur = {
     var msg = man.hi()
     test.equal(msg, 'I am a man and my name is ' + name, 'class and inheritance should work')
     test.done()
+  },
+
+  sourceMaps: function (test) {
+    var regex = /\.js\.map$/i;
+    var files = fs.readdirSync(path.join(__dirname, 'tmp')).filter(function (filename) {
+      return regex.test(filename);
+    });
+    test.equal(files.length, 4);
+    test.done();
   }
 
 };
