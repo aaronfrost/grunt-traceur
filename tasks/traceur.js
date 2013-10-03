@@ -16,13 +16,15 @@ module.exports = function(grunt) {
       path = require('path');
 
   grunt.registerMultiTask('traceur', 'Transpile ES6 JavaScript to ES3 JavaScript', function() {
-
     var traceur = require('traceur');
+
+    var options = this.options({
+      sourceMaps: false
+    });
 
     this.files.forEach(function(group){
       var reporter = new traceur.util.ErrorReporter(),
-          project = new traceur.semantics.symbols.Project(),
-          SourceMapGenerator = traceur.outputgeneration.SourceMapGenerator;
+          project = new traceur.semantics.symbols.Project();
 
       console.log(group.dest, group.src);
       group.src.forEach(function(filename){
@@ -46,20 +48,24 @@ module.exports = function(grunt) {
 
       //console.log(results);
       
-      results.keys().forEach(function(file){
-        var options = {
-          encoding: 'utf8'
-        },
-        tree, source, filename, outputfile,
-        traceurOptions = {
+      results.keys().forEach(function (file) {
+        var traceurOptions = {};
 
-        };
+        if (options.sourceMaps) {
+          traceurOptions.sourceMapGenerator = new traceur.outputgeneration.SourceMapGenerator({
+            file: file.name
+          });
+        }
 
-        tree = results.get(file);
-        filename = file.name;
-        source = traceur.outputgeneration.TreeWriter.write(tree, false);
-        outputfile = group.dest+path.basename(file.name);
-        grunt.file.write(outputfile, source, options);
+        var tree = results.get(file);
+        var source = traceur.outputgeneration.TreeWriter.write(tree, traceurOptions);
+        var outputfile = group.dest + path.basename(file.name);
+        grunt.file.write(outputfile, source);
+
+        if (traceurOptions.sourceMap) {
+          grunt.file.write(outputfile + '.map', traceurOptions.sourceMap);
+        }
+
         console.log(outputfile + ' successful.'); 
       });
 
