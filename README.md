@@ -38,8 +38,6 @@ grunt.initConfig({
 ```
 Once the files have ben transpiled into ES3, you can minify or concat them. 
 
-SourceMaps will be available in a future version. 
-
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
