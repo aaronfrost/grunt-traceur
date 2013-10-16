@@ -22,6 +22,9 @@ module.exports = function(grunt) {
       sourceMaps: false
     });
 
+    // Pass along any defined options to traceur
+    traceur.options.setFromObject(options);
+
     this.files.forEach(function(group){
       var reporter = new traceur.util.ErrorReporter(),
           project = new traceur.semantics.symbols.Project();
