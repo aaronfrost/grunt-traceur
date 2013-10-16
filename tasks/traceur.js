@@ -62,7 +62,7 @@ module.exports = function(grunt) {
 
         var tree = results.get(file);
         var source = traceur.outputgeneration.TreeWriter.write(tree, traceurOptions);
-        var outputfile = group.dest + path.basename(file.name);
+        var outputfile = group.dest + file.name;
         grunt.file.write(outputfile, source);
 
         if (traceurOptions.sourceMap) {
