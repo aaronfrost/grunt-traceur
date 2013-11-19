@@ -9,65 +9,71 @@
 'use strict';
 var fs = require('fs'),
 path = require('path');
-var traceur = require('traceur');
+var compiler = require('../lib/compiler');
+var async = require('async');
 
+function asyncCompile(content, filename, options, callback) {
+  var result;
+  try {
+    result = compiler.compile(content, filename, options);
+  } catch (e) {
+    callback(e.message, null);
+    return;
+  }
+  callback(null, result);
+}
 
 /**
- * Compiles a list of srcs files
- * */
-function compile(grunt, srcs, dest) {
-  var project = new traceur.semantics.symbols.Project('/');
-  var reporter = new traceur.util.ErrorReporter();
-  reporter.reportMessageInternal = function(location, format, args) {
-    throw new Error(
-      global.traceur.util.ErrorReporter.format(location, format, args));
-  };
-
-  srcs.forEach(function(filename) {
-    var data = grunt.file.read(filename).toString('utf8');
-    var sourceFile = new traceur.syntax.SourceFile(filename, data);
-    project.addFile(sourceFile);
-  });
-
+* Compiles a list of srcs files
+* */
+function compileAll(grunt, compile, srcs, dest, options, callback) {
   grunt.log.debug('Compiling... ' + dest);
-  try {
-    var compiledObjectMap = traceur.codegeneration.Compiler.compile(
-    reporter, project, false);
-  } catch (e) {
-    grunt.log.error(e.message);
-    return false;
-  }
-  grunt.log.debug('Compilation successful - ' + dest);
 
-  var writerConfig = {};
-  var result = global.traceur.outputgeneration.ProjectWriter.write(
-  compiledObjectMap, writerConfig);
-  grunt.file.write(dest, result, {encoding: 'utf8'});
-  grunt.log.ok(srcs + ' -> ' + dest);
-  return true;
+
+  async.map(srcs, function(src, callback) {
+    var content = grunt.file.read(src).toString('utf8');
+    compile(content, src, options, callback);
+  }, function(err, result) {
+    if (err) {
+      grunt.log.error(err);
+      callback(false);
+    } else {
+      var compiled = result.join('');
+      grunt.log.debug('Compilation successful - ' + dest);
+      grunt.file.write(dest, compiled, {encoding: 'utf8'});
+      grunt.log.ok(srcs + ' -> ' + dest);
+      callback(true);
+    }
+  });
 }
 
 module.exports = function(grunt) {
   grunt.registerMultiTask('traceur',
     'Compile ES6 JavaScript to ES3 JavaScript', function() {
       var options = this.options({
-        sourceMaps: false
+        sourceMaps: false,
+        spawn: true
       });
       grunt.log.debug('using options: ' + JSON.stringify(options));
+      var done = this.async();
+      var server, compile;
 
-      traceur.options.reset();
-      for (var key in options) {
-        traceur.options[key] = options[key];
+      if (options.spawn) {
+        server = compiler.server();
+        compile = server.compile;
+      } else {
+        compile = asyncCompile;
       }
+      delete options.spawn;
 
       // We don't terminate immediately on errors to log all error messages
       // before terminating.
-      var success = true;
-      this.files.forEach(function(group) {
-        if (!compile(grunt, group.src, group.dest))
-          success = false;
+      async.every(this.files, function(group, callback) {
+        compileAll(grunt, compile, group.src, group.dest, options, callback);
+      }, function(success) {
+        if (server) server.stop();
+        done(success);
       });
-      return success;
     });
 
 };
