@@ -1,8 +1,6 @@
-function test(a = 100, ...rest){
+export function test(a = 100, ...rest){
   return {
     a: a,
     rest: rest
   }
 }
-
-module.exports = test

@@ -12,10 +12,10 @@ path = require('path');
 var compiler = require('../lib/compiler');
 var async = require('async');
 
-function asyncCompile(content, filename, options, callback) {
+function asyncCompile(content, options, callback) {
   var result;
   try {
-    result = compiler.compile(content, filename, options);
+    result = compiler.compile(content, options);
   } catch (e) {
     callback(e.message, null);
     return;
@@ -28,19 +28,23 @@ function asyncCompile(content, filename, options, callback) {
 * */
 function compileAll(grunt, compile, srcs, dest, options, callback) {
   grunt.log.debug('Compiling... ' + dest);
-
-
-  async.map(srcs, function(src, callback) {
-    var content = grunt.file.read(src).toString('utf8');
-    compile(content, src, options, callback);
-  }, function(err, result) {
+  var content = srcs.map(function (src) {
+    return grunt.file.read(src).toString('utf8');
+  }).join(';');
+  options.filename = dest;
+  compile(content, options, function(err, result) {
+    var sourceMapName;
     if (err) {
       grunt.log.error(err);
       callback(false);
     } else {
-      var compiled = result.join('');
-      grunt.log.debug('Compilation successful - ' + dest);
-      grunt.file.write(dest, compiled, {encoding: 'utf8'});
+      grunt.log.debug('Compiled successfully to "' + dest + '"');
+      grunt.file.write(dest, result.js, {encoding: 'utf8'});
+      if (options.sourceMap) {
+        sourceMapName = dest.replace(/\.js$/, '.map');
+        grunt.file.write(sourceMapName, result.sourceMap);
+        grunt.log.debug('SourceMap written to "' + sourceMapName + '"');
+      }
       grunt.log.ok(srcs + ' -> ' + dest);
       callback(true);
     }
@@ -51,8 +55,7 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('traceur',
     'Compile ES6 JavaScript to ES3 JavaScript', function() {
       var options = this.options({
-        sourceMaps: false,
-        spawn: true
+        spawn: false
       });
       grunt.log.debug('using options: ' + JSON.stringify(options));
       var done = this.async();
@@ -75,5 +78,4 @@ module.exports = function(grunt) {
         done(success);
       });
     });
-
 };

@@ -1,11 +1,3 @@
-module test {
-    module inner {
-        var a = 123
-        export a
-    }
-    import a from inner
-    export a
-}
-
-import a from test
-module.exports = a
+import {a as moduleA, b} from './destructuring';
+module m from './destructuring';
+export var text = [moduleA, b, m.a, m.b].join(', ');
