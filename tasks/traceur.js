@@ -55,7 +55,7 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('traceur',
     'Compile ES6 JavaScript to ES3 JavaScript', function() {
       var options = this.options({
-        spawn: false
+        sourceMap: true
       });
       grunt.log.debug('using options: ' + JSON.stringify(options));
       var done = this.async();
