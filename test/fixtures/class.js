@@ -10,7 +10,7 @@ class Person {
 
 }
 
-class Man extends Person {
+export class Man extends Person {
 
   constructor (name) {
       super(name);
@@ -21,5 +21,3 @@ class Man extends Person {
   }
 
 }
-
-module.exports = Man

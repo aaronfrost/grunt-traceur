@@ -12,19 +12,25 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    
+
     // Configuration to be run (and then tested).
     traceur: {
       options: {
-        sourceMaps: true
+        includeRuntime: true,
+        spawn: true
+        // traceur options here
       },
       test: {
-        files: {
-          'test/tmp/': ['test/fixtures/*.js']
-        }
-      },
+        files: [{
+          expand: true,
+          cwd: 'test/fixtures',
+          src: ['*.js'],
+          dest: 'test/tmp'
+        }, {
+          'test/tmp/all.js': ['test/fixtures/args.js', 'test/fixtures/destructuring.js']
+        }]
+      }
     },
-
     nodeunit: {
       tests: ['test/*_test.js']
     }
