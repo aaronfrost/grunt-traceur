@@ -1,6 +1,6 @@
 # grunt-traceur
 
-> A grunt plugin for Google's Traceur-Compile, a lib to compile ES6 JavaScript into ES3 JavaScript. 
+> A grunt plugin for Google's Traceur-Compile, a lib to compile ES6 JavaScript into ES5 JavaScript.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
@@ -36,7 +36,7 @@ grunt.initConfig({
   },
 })
 ```
-Once the files have ben transpiled into ES3, you can minify or concat them. 
+Once the files have been transpiled into ES5, you can minify or concat them.
 
 ### Options
 

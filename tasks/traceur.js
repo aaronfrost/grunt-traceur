@@ -55,7 +55,7 @@ function compileAll(grunt, compile, srcs, dest, options, callback) {
 
 module.exports = function(grunt) {
   grunt.registerMultiTask('traceur',
-    'Compile ES6 JavaScript to ES3 JavaScript', function() {
+    'Compile ES6 JavaScript to ES5 JavaScript', function() {
       var options = this.options({
         sourceMap: true
       });
