@@ -38,13 +38,15 @@ function compileAll(grunt, compile, srcs, dest, options, callback) {
       grunt.log.error(err);
       callback(false);
     } else {
-      grunt.log.debug('Compiled successfully to "' + dest + '"');
-      grunt.file.write(dest, result.js, {encoding: 'utf8'});
       if (options.sourceMap) {
-        sourceMapName = dest.replace(/\.js$/, '.map');
+        sourceMapName = dest + '.map';
+        result.js += '\n//# sourceMappingURL=' +
+        path.basename(sourceMapName) + '\n';
         grunt.file.write(sourceMapName, result.sourceMap);
         grunt.log.debug('SourceMap written to "' + sourceMapName + '"');
       }
+      grunt.file.write(dest, result.js, {encoding: 'utf8'});
+      grunt.log.debug('Compiled successfully to "' + dest + '"');
       grunt.log.ok(srcs + ' -> ' + dest);
       callback(true);
     }
