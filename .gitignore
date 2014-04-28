@@ -3,3 +3,4 @@ npm-debug.log
 test/tmp
 .DS_Store
 *.sublime-*
+.idea
