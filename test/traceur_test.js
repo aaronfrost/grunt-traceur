@@ -58,6 +58,59 @@ exports.traceur = {
     var man = new Man(name);
     var msg = man.hi();
     test.equal(msg, 'I am a man and my name is ' + name, 'class and inheritance should work');
+    test.equal(man.firstInitial, 'j', 'computed properties should work');
+    test.done();
+  },
+
+  arrow: function(test) {
+    var arrow = require('./tmp/arrow');
+    test.equal(arrow.pi(), 3.1415);
+    test.equal(arrow.square(5), 25);
+    test.equal(arrow.greater(4, 1), true);
+    test.equal(arrow.greater(1, 4), false);
+    test.done();
+  },
+
+  forOf: function(test) {
+    var sum = require('./tmp/for_of').sum;
+    test.equal(sum([1, 2, 3, 4]), 10);
+    test.done();
+  },
+
+  generator: function(test) {
+    var range = require('./tmp/generator').generator.range;
+    var gen = range(0, 10, 2);
+    var item = gen.next();
+    for (var i = 0; !item.done; i += 2) {
+      test.equal(item.value, i);
+      item = gen.next();
+    }
+    test.done();
+  },
+
+  generatorComprehension: function(test) {
+    var squareSum = require('./tmp/generator').generator.squareSum;
+    test.equal(squareSum([1, 2, 3, 4]), 30);
+    test.done();
+  },
+
+  numericLiteral: function(test) {
+    var nums = require('./tmp/numeric_literal').nums;
+    test.deepEqual(nums, [3, 15]);
+    test.done();
+  },
+
+  templateLiteral: function(test) {
+    var literal = require('./tmp/template_literal').literal;
+    test.equal(literal, 'My name is John Smith.');
+    test.done();
+  },
+
+  objectInitializer: function(test) {
+    var obj = require('./tmp/object_initializer').obj;
+    test.equal(obj.x, 10);
+    test.equal(obj.y, 5);
+    test.equal(obj.add(), 15);
     test.done();
   },
 
@@ -66,7 +119,7 @@ exports.traceur = {
     var files = fs.readdirSync(path.join(__dirname, 'tmp')).filter(function (filename) {
       return regex.test(filename);
     });
-    test.equal(files.length, 5);
+    test.equal(files.length, 12);
     test.done();
   },
 
