@@ -94,6 +94,12 @@ exports.traceur = {
     test.done();
   },
 
+  arrayComprehension: function(test) {
+    var squared = require('./tmp/array').squared;
+    test.deepEqual(squared([1, 2, 3, 4]), [1, 4, 9, 16]);
+    test.done();
+  },
+
   numericLiteral: function(test) {
     var nums = require('./tmp/numeric_literal').nums;
     test.deepEqual(nums, [3, 15]);
@@ -119,7 +125,7 @@ exports.traceur = {
     var files = fs.readdirSync(path.join(__dirname, 'tmp')).filter(function (filename) {
       return regex.test(filename);
     });
-    test.equal(files.length, 12);
+    test.equal(files.length, 13);
     test.done();
   },
 
