@@ -32,7 +32,7 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "traceur": "^0.0.33",
+    "traceur": "~0.0.33",
     "async": "^0.2.10"
   },
   "peerDependencies": {
