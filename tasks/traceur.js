@@ -7,10 +7,13 @@
 */
 
 'use strict';
-var fs = require('fs'),
-path = require('path');
+var fs = require('fs');
+var path = require('path');
 var compiler = require('../lib/compiler');
-var async = require('async');
+var Promise = require('es6-promises');
+var RUNTIME_PATH = (function () {
+  return require('traceur').RUNTIME_PATH;
+})();
 
 function asyncCompile(content, options, callback) {
   var result;
@@ -23,44 +26,56 @@ function asyncCompile(content, options, callback) {
   callback(null, result);
 }
 
-/**
-* Compiles a list of srcs files
-* */
-function compileAll(grunt, compile, srcs, dest, options, callback) {
-  grunt.log.debug('Compiling... ' + dest);
-  var content = srcs.map(function (src) {
-    return grunt.file.read(src).toString('utf8');
-  }).join(';');
-  options.filename = dest;
-  compile(content, options, function(err, result) {
-    var sourceMapName;
-    if (err) {
-      grunt.log.error(err);
-      callback(false);
-    } else {
-      if (options.sourceMap) {
-        sourceMapName = dest + '.map';
-        result.js += '\n//# sourceMappingURL=' +
-        path.basename(sourceMapName) + '\n';
-        grunt.file.write(sourceMapName, result.sourceMap);
-        grunt.log.debug('SourceMap written to "' + sourceMapName + '"');
-      }
-      grunt.file.write(dest, result.js, {encoding: 'utf8'});
-      grunt.log.debug('Compiled successfully to "' + dest + '"');
-      grunt.log.ok(srcs + ' -> ' + dest);
-      callback(true);
+/*
+* Compiles one file
+*/
+function compileOne (grunt, compile, src, dest, options) {
+  return new Promise(function (resolve, reject) {
+    if (src.length > 1) {
+      reject(Error('source MUST be a single file OR multiple files using expand:true. ' +
+        'Check out the README.'));
     }
+    src = src[0];
+    var content = grunt.file.read(src).toString('utf8');
+    options.filename = src;
+    compile(content, options, function (err, result) {
+      var sourceMapName, sourceMapPath;
+      if (err) {
+        grunt.log.error(src + ' -> ' + dest);
+        grunt.log.error('ERRORS:');
+        grunt.log.error(err);
+        reject(err);
+      } else {
+        if (options.includeRuntime) {
+          result.js = fs.readFileSync(RUNTIME_PATH) + result.js;
+        }
+        if (options.sourceMap) {
+          sourceMapName = path.basename(src) + '.map';
+          sourceMapPath = path.join(dest, '..',  sourceMapName);
+          result.js += '//# sourceMappingURL=' + sourceMapName + '\n';
+          grunt.file.write(sourceMapPath, result.sourceMap);
+          grunt.log.debug('SourceMap written to "' + sourceMapName + '"');
+        }
+        grunt.file.write(dest, result.js, {
+          encoding: 'utf8'
+        });
+        grunt.log.debug('Compiled successfully to "' + dest + '"');
+        grunt.log.ok(src + ' -> ' + dest);
+        resolve();
+      }
+    });
   });
 }
 
 module.exports = function(grunt) {
   grunt.registerMultiTask('traceur',
     'Compile ES6 JavaScript to ES5 JavaScript', function() {
-      var options = this.options({
-        sourceMap: true
-      });
+      var options = this.options();
       grunt.log.debug('using options: ' + JSON.stringify(options));
       var done = this.async();
+      // we use a flag so that every errors are printed out
+      // instead of quitting at the first one
+      var success = true;
       var server, compile;
 
       if (options.spawn) {
@@ -70,14 +85,18 @@ module.exports = function(grunt) {
         compile = asyncCompile;
       }
       delete options.spawn;
-
-      // We don't terminate immediately on errors to log all error messages
-      // before terminating.
-      async.every(this.files, function(group, callback) {
-        compileAll(grunt, compile, group.src, group.dest, options, callback);
-      }, function(success) {
-        if (server) server.stop();
-        done(success);
-      });
+      Promise
+        .all(this.files.map(function (group) {
+          return compileOne(grunt, compile, group.src, group.dest, options)
+            .catch(function () {
+              success = false;
+            });
+        }))
+        .then(function () {
+          if (server) {
+            server.stop();
+          }
+          done(success);
+        });
     });
 };
