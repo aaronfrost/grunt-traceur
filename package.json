@@ -18,6 +18,9 @@
       "email": "jeff.mcriffey@ambition.com"
     }
   ],
+  "scripts": {
+    "test": "grunt"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/aaronfrost/grunt-traceur.git"
