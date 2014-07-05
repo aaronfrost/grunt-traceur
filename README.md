@@ -1,6 +1,8 @@
 _published the 1.0 release to npmjs.org_
 # grunt-traceur
 
+[![Build Status](https://travis-ci.org/aaronfrost/grunt-traceur.svg?branch=master)](https://travis-ci.org/aaronfrost/grunt-traceur)
+
 > A grunt plugin for Google's Traceur-Compile, a lib to compile ES6 JavaScript into ES5 JavaScript.
 
 ## Getting Started
