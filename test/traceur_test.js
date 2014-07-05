@@ -125,7 +125,7 @@ exports.traceur = {
     var files = fs.readdirSync(path.join(__dirname, 'tmp')).filter(function (filename) {
       return regex.test(filename);
     });
-    test.equal(files.length, 13);
+    test.equal(files.length, 12);
     test.done();
   },
 
@@ -140,5 +140,4 @@ exports.traceur = {
     test.equal(all.b, 'This is B', 'destructuring assignment should work');
     test.done();
   }
-
 };
