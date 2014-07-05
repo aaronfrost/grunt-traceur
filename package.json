@@ -50,6 +50,7 @@
     "grunt-contrib-nodeunit": "^0.3.3"
   },
   "keywords": [
-    "gruntplugin"
+    "gruntplugin",
+    "traceur"
   ]
 }
