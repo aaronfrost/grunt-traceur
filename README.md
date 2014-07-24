@@ -32,9 +32,12 @@ grunt.initConfig({
       // traceur options here
     },
     custom: {
-      files:{
-        'build/all.js': ['js/**/*.js']
-      }
+      files: [{
+        expand: true,
+        cwd: 'src/es6',
+        src: ['*.js'],
+        dest: 'src/es5'
+      }]
     },
   },
 })

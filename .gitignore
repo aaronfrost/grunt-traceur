@@ -3,4 +3,6 @@ npm-debug.log
 test/tmp
 .DS_Store
 *.sublime-*
+**/dist/*
 .idea
+.jshintrc
