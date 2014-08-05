@@ -125,7 +125,7 @@ exports.traceur = {
     var files = fs.readdirSync(path.join(__dirname, 'tmp')).filter(function (filename) {
       return regex.test(filename);
     });
-    test.equal(files.length, 12);
+    test.equal(files.length, 11);
     test.done();
   }
 };
