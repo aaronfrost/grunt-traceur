@@ -39,7 +39,6 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "async": "^0.2.10",
     "es6-promises": "^1.0.8",
     "traceur": "0.0.55"
   },
