@@ -1,6 +1,8 @@
 _published the 1.0 release to npmjs.org_
 # grunt-traceur
 
+[![Build Status](https://travis-ci.org/aaronfrost/grunt-traceur.svg?branch=master)](https://travis-ci.org/aaronfrost/grunt-traceur)
+
 > A grunt plugin for Google's Traceur-Compile, a lib to compile ES6 JavaScript into ES5 JavaScript.
 
 ## Getting Started
@@ -30,9 +32,12 @@ grunt.initConfig({
       // traceur options here
     },
     custom: {
-      files:{
-        'build/all.js': ['js/**/*.js']
-      }
+      files: [{
+        expand: true,
+        cwd: 'src/es6',
+        src: ['*.js'],
+        dest: 'src/es5'
+      }]
     },
   },
 })
@@ -47,6 +52,7 @@ Some common options:
 
 * `experimental` - Turn on all experimental features
 * `blockBinding` - Turn on support for `let` and `const`
+* `includeRuntime` - Prepend runtime to output
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
