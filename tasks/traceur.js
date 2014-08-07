@@ -49,11 +49,11 @@ function compileOne (grunt, compile, src, dest, options) {
         if (options.includeRuntime) {
           result.js = fs.readFileSync(RUNTIME_PATH) + result.js;
         }
-        if (options.sourceMap) {
+        if (options.sourceMaps) {
           sourceMapName = path.basename(src) + '.map';
           sourceMapPath = path.join(dest, '..',  sourceMapName);
           result.js += '//# sourceMappingURL=' + sourceMapName + '\n';
-          grunt.file.write(sourceMapPath, result.sourceMap);
+          grunt.file.write(sourceMapPath, result.generatedSourceMap);
           grunt.log.debug('SourceMap written to "' + sourceMapName + '"');
         }
         grunt.file.write(dest, result.js, {
