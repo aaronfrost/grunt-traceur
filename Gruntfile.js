@@ -16,6 +16,7 @@ module.exports = function(grunt) {
     // Configuration to be run (and then tested).
     traceur: {
       options: {
+        experimental: true,
         sourceMaps: true
         // traceur options here
       },
