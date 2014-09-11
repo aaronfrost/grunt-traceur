@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "es6-promises": "^1.0.8",
-    "traceur": "0.0.60"
+    "traceur": "0.0.61"
   },
   "peerDependencies": {
     "grunt": "^0.4.4"
