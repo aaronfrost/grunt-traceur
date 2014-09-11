@@ -47,16 +47,16 @@ function compileOne (grunt, compile, src, dest, options) {
         reject(err);
       } else {
         if (options.includeRuntime) {
-          result.js = fs.readFileSync(RUNTIME_PATH) + result.js;
+          result = fs.readFileSync(RUNTIME_PATH) + result;
         }
         if (options.sourceMaps) {
           sourceMapName = path.basename(src) + '.map';
           sourceMapPath = path.join(dest, '..',  sourceMapName);
-          result.js += '//# sourceMappingURL=' + sourceMapName + '\n';
+          result += '//# sourceMappingURL=' + sourceMapName + '\n';
           grunt.file.write(sourceMapPath, result.generatedSourceMap);
           grunt.log.debug('SourceMap written to "' + sourceMapName + '"');
         }
-        grunt.file.write(dest, result.js, {
+        grunt.file.write(dest, result, {
           encoding: 'utf8'
         });
         grunt.log.debug('Compiled successfully to "' + dest + '"');
