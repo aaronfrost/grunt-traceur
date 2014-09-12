@@ -127,7 +127,9 @@ exports.traceur = {
     });
 
     files.forEach(function(file) { //make sure the files have contents
-      test.ok(fs.readFileSync(path.join(__dirname, 'tmp', file)));
+      test.ok(
+        fs.readFileSync(path.join(__dirname, 'tmp', file), 'utf-8')
+      );
     });
     test.equal(files.length, 11);
     test.done();
