@@ -52,11 +52,11 @@ function compileOne (grunt, compile, src, dest, options) {
         if (options.sourceMaps) {
           sourceMapName = path.basename(src) + '.map';
           sourceMapPath = path.join(dest, '..',  sourceMapName);
-          result += '//# sourceMappingURL=' + sourceMapName + '\n';
-          grunt.file.write(sourceMapPath, result.generatedSourceMap);
+          result[0] += '//# sourceMappingURL=' + sourceMapName + '\n';
+          grunt.file.write(sourceMapPath, result[1]);
           grunt.log.debug('SourceMap written to "' + sourceMapName + '"');
         }
-        grunt.file.write(dest, result, {
+        grunt.file.write(dest, result[0], {
           encoding: 'utf8'
         });
         grunt.log.debug('Compiled successfully to "' + dest + '"');
