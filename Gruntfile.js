@@ -18,8 +18,7 @@ module.exports = function(grunt) {
       options: {
         experimental: true,
         modules: 'commonjs',
-        sourceMaps: true,
-        includeRuntime: true
+        sourceMaps: true
         // traceur options here
       },
       test: {
