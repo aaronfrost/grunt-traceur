@@ -47,7 +47,7 @@ function compileOne (grunt, compile, src, dest, options) {
         reject(err);
       } else {
         if (options.includeRuntime) {
-          result = fs.readFileSync(RUNTIME_PATH) + result;
+          result[0] = fs.readFileSync(RUNTIME_PATH) + result[0];
         }
         if (options.sourceMaps) {
           sourceMapName = path.basename(src) + '.map';
