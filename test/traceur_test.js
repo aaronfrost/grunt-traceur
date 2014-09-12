@@ -125,6 +125,12 @@ exports.traceur = {
     var files = fs.readdirSync(path.join(__dirname, 'tmp')).filter(function (filename) {
       return regex.test(filename);
     });
+
+    files.forEach(function(file) { //make sure the files have contents
+      test.ok(
+        fs.readFileSync(path.join(__dirname, 'tmp', file), 'utf-8')
+      );
+    });
     test.equal(files.length, 11);
     test.done();
   }
