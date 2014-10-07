@@ -30,6 +30,13 @@ module.exports = function(grunt) {
         }]
       }
     },
+    mkdir: {
+      test: {
+        options: {
+          create: ['test/tmp']
+        }
+      }
+    },
     clean: ['test/tmp'],
     nodeunit: {
       tests: ['test/*_test.js']
@@ -40,9 +47,10 @@ module.exports = function(grunt) {
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
 
+  grunt.loadNpmTasks('grunt-mkdir');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-clean');
 
-  grunt.registerTask('default', ['clean', 'traceur', 'nodeunit']);
+  grunt.registerTask('default', ['mkdir', 'traceur', 'nodeunit', 'clean']);
 
 };
