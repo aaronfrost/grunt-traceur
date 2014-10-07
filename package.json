@@ -39,7 +39,7 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "es6-promises": "^1.0.8",
+    "es6-promise": "^1.0.0",
     "traceur": "0.0.61"
   },
   "peerDependencies": {

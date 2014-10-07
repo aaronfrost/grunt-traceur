@@ -10,7 +10,7 @@
 var fs = require('fs');
 var path = require('path');
 var compiler = require('../lib/compiler');
-var Promise = require('es6-promises');
+var Promise = require('es6-promise').Promise;
 var RUNTIME_PATH = (function () {
   return require('traceur').RUNTIME_PATH;
 })();
