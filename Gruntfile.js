@@ -1,6 +1,6 @@
 /*
  * grunt-traceur
- * https://github.com/aaronfrost/grunt
+ * https://github.com/aaronfrost/grunt-traceur
  *
  * Copyright (c) 2013 Aaron Frost
  * Licensed under the MIT license.
@@ -19,7 +19,6 @@ module.exports = function(grunt) {
         experimental: true,
         modules: 'commonjs',
         sourceMaps: true
-        // traceur options here
       },
       test: {
         files: [{

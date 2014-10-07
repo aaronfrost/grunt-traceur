@@ -24,7 +24,7 @@ var fs = require('fs');
 var path = require('path');
 
 function getType (obj) {
-  return Object.prototype.toString.call(obj)
+  return Object.prototype.toString.call(obj);
 }
 
 exports.traceur = {
