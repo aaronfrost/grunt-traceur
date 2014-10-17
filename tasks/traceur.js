@@ -31,14 +31,7 @@ function asyncCompile(content, options, callback) {
 */
 function compileOne (grunt, compile, src, dest, options) {
   return new Promise(function (resolve, reject) {
-    if (src.length > 1) {
-      reject(Error('source MUST be a single file OR multiple files using expand:true. ' +
-        'Check out the README.'));
-    }
-    src = src[0];
     var content = grunt.file.read(src).toString('utf8');
-    options.filename = src;
-    options.moduleName = [path.dirname(src), path.sep, path.basename(src, path.extname(src))].join('').replace(path.sep, '_');
     compile(content, options, function (err, result) {
       var sourceMapName, sourceMapPath;
       if (err) {
@@ -88,7 +81,22 @@ module.exports = function(grunt) {
       delete options.spawn;
       Promise
         .all(this.files.map(function (group) {
-          return compileOne(grunt, compile, group.src, group.dest, options)
+          var src = group.src;
+          if (src.length > 1) {
+            return Promise.reject(
+              Error('source MUST be a single file OR multiple files using expand:true. Check out the README.')
+            );
+          }
+          src = src[0];
+          var moduleName = src.substring(0, src.length - path.extname(src).length);
+          if (group.orig && group.orig.cwd) {
+            var cwd = group.orig.cwd;
+            cwd = cwd[cwd.length - 1] === path.sep ? cwd : cwd + path.sep;
+            moduleName = moduleName.substring(cwd.length);
+          }
+          options.moduleName = moduleName;
+          options.filename = src;
+          return compileOne(grunt, compile, src, group.dest, options)
             .catch(function () {
               success = false;
             });
