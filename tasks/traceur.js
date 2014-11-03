@@ -38,7 +38,9 @@ function compileOne (grunt, compile, src, dest, options) {
     src = src[0];
     var content = grunt.file.read(src).toString('utf8');
     options.filename = src;
-    options.moduleName = [path.dirname(src), path.sep, path.basename(src, path.extname(src))].join('').replace(path.sep, '_');
+    if (options.moduleNames) {
+      options.moduleName = [path.dirname(src), path.sep, path.basename(src, path.extname(src))].join('').replace(path.sep, '_');
+    }
     compile(content, options, function (err, result) {
       var sourceMapName, sourceMapPath;
       if (err) {
@@ -71,7 +73,9 @@ function compileOne (grunt, compile, src, dest, options) {
 module.exports = function(grunt) {
   grunt.registerMultiTask('traceur',
     'Compile ES6 JavaScript to ES5 JavaScript', function() {
-      var options = this.options();
+      var options = this.options({
+        moduleNames: true
+      });
       grunt.log.debug('using options: ' + JSON.stringify(options));
       var done = this.async();
       // we use a flag so that every errors are printed out
