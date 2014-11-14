@@ -37,9 +37,17 @@ function compileOne (grunt, compile, src, dest, options) {
     }
     src = src[0];
     var content = grunt.file.read(src).toString('utf8');
-    options.filename = src;
+    if (options.pathPrefix) {
+      options.filename = src.replace(options.pathPrefix, "");
+    } else {
+      options.filename = src;
+    }
+    
     if (options.moduleNames) {
       options.moduleName = [path.dirname(src), path.sep, path.basename(src, path.extname(src))].join('').replace(path.sep, '_');
+      if (options.pathPrefix) {
+        options.moduleName = options.filename.replace(path.extname(src), "");
+      }
     }
     compile(content, options, function (err, result) {
       var sourceMapName, sourceMapPath;
