@@ -30,6 +30,10 @@ grunt.initConfig({
   traceur: {
     options: {
       // traceur options here
+      experimental: true,
+      // module naming options
+      sourceBasePackage: "src/es6",
+      distBasePackage: "com/mycompany/project"
     },
     custom: {
       files: [{
@@ -54,6 +58,8 @@ Some common options:
 * `blockBinding` - Turn on support for `let` and `const`
 * `includeRuntime` - Prepend runtime to output
 * `moduleNames` - Generate named module (default: true)
+* `sourceBasePackage` - Strip the specified prefix from generated module names
+* `distBasePackage` - Prefix to add to the generated module names (applied AFTER the `sourceBasePackage` option)
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
