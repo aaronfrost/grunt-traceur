@@ -18,7 +18,11 @@ module.exports = function(grunt) {
       options: {
         experimental: true,
         modules: 'commonjs',
-        sourceMaps: true
+        sourceMaps: true,
+        arrayComprehension: true,
+        generatorComprehension: true,
+        sourceBasePackage: "test/fixtures",
+        distBasePackage: "test/tmp"
         // traceur options here
       },
       test: {
