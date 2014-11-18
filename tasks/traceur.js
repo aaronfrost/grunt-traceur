@@ -29,17 +29,32 @@ function asyncCompile(content, options, callback) {
 /*
 * Compiles one file
 */
-function compileOne (grunt, compile, src, dest, options) {
+function compileOne (grunt, compile, sourceBasePackage, distBasePackage, src,
+  dest, options) {
   return new Promise(function (resolve, reject) {
     if (src.length > 1) {
-      reject(Error('source MUST be a single file OR multiple files using expand:true. ' +
-        'Check out the README.'));
+      reject(Error('source MUST be a single file OR multiple files using ' +
+        'expand:true. Check out the README.'));
     }
     src = src[0];
     var content = grunt.file.read(src).toString('utf8');
     options.filename = src;
     if (options.moduleNames) {
-      options.moduleName = [path.dirname(src), path.sep, path.basename(src, path.extname(src))].join('').replace(path.sep, '_');
+      options.moduleName = [
+        path.dirname(src),
+        path.sep,
+        path.basename(src, path.extname(src))
+      ].join('');
+      var basePackageMatched =
+        options.moduleName.substring(0, sourceBasePackage.length + 1) ===
+        (sourceBasePackage + path.sep);
+      if (sourceBasePackage && basePackageMatched) {
+        options.moduleName =
+          options.moduleName.substring(sourceBasePackage.length + 1);
+      }
+      if (distBasePackage) {
+        options.moduleName = distBasePackage + path.sep + options.moduleName;
+      }
     }
     compile(content, options, function (err, result) {
       var sourceMapName, sourceMapPath;
@@ -92,7 +107,10 @@ module.exports = function(grunt) {
       delete options.spawn;
       Promise
         .all(this.files.map(function (group) {
-          return compileOne(grunt, compile, group.src, group.dest, options)
+          var sourceBasePackage = options.sourceBasePackage || "";
+          var distBasePackage = options.distBasePackage || "";
+          return compileOne(grunt, compile, sourceBasePackage, distBasePackage,
+            group.src, group.dest, options)
             .catch(function () {
               success = false;
             });

@@ -22,7 +22,7 @@ export class Man extends Person {
   }
 
   hi () {
-      return 'I am a man and my name is ' + super();
+      return 'I am a man and my name is ' + super.hi();
   }
 
 }
