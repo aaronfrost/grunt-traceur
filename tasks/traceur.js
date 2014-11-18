@@ -107,8 +107,8 @@ module.exports = function(grunt) {
       delete options.spawn;
       Promise
         .all(this.files.map(function (group) {
-          var sourceBasePackage = options.sourceBasePackage;
-          var distBasePackage = options.distBasePackage;
+          var sourceBasePackage = options.sourceBasePackage || "";
+          var distBasePackage = options.distBasePackage || "";
           return compileOne(grunt, compile, sourceBasePackage, distBasePackage,
             group.src, group.dest, options)
             .catch(function () {
