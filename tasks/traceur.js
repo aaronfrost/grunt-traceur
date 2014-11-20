@@ -39,7 +39,7 @@ function compileOne (grunt, compile, src, dest, options) {
     var content = grunt.file.read(src).toString('utf8');
     options.filename = src;
     if (options.moduleNames) {
-      options.moduleName = [path.dirname(src), path.sep, path.basename(src, path.extname(src))].join('').replace(path.sep, '_');
+      options.moduleName = [path.dirname(dest), path.sep, path.basename(dest, path.extname(dest))].join('');
     }
     compile(content, options, function (err, result) {
       var sourceMapName, sourceMapPath;
