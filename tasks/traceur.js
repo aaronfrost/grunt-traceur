@@ -90,6 +90,10 @@ module.exports = function(grunt) {
         compile = asyncCompile;
       }
       delete options.spawn;
+      if (!this.files.length) {
+        grunt.log.error('none of the listed sources are valid');
+        success = false;
+      }
       Promise
         .all(this.files.map(function (group) {
           return compileOne(grunt, compile, group.src, group.dest, options)
