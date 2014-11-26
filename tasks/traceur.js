@@ -97,7 +97,8 @@ module.exports = function(grunt) {
       Promise
         .all(this.files.map(function (group) {
           return compileOne(grunt, compile, group.src, group.dest, options)
-            .catch(function () {
+            .catch(function (e) {
+              grunt.log.error(e.message);
               success = false;
             });
         }))
