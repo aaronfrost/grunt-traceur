@@ -29,8 +29,7 @@ function asyncCompile(content, options, callback) {
 /*
 * Compiles one file
 */
-function compileOne (grunt, compile, sourceBasePackage, distBasePackage, src,
-  dest, options) {
+function compileOne (grunt, compile, src, dest, options) {
   return new Promise(function (resolve, reject) {
     if (src.length > 1) {
       reject(Error('source MUST be a single file OR multiple files using ' +
@@ -45,15 +44,16 @@ function compileOne (grunt, compile, sourceBasePackage, distBasePackage, src,
         path.sep,
         path.basename(src, path.extname(src))
       ].join('');
-      var basePackageMatched =
-        options.moduleName.substring(0, sourceBasePackage.length + 1) ===
-        (sourceBasePackage + path.sep);
-      if (sourceBasePackage && basePackageMatched) {
+      var stripPrefix = options.moduleNaming.stripPrefix;
+      var namePrefixMatched = (stripPrefix + path.sep) ===
+        options.moduleName.substring(0, stripPrefix.length + path.sep.length);
+      if (stripPrefix && namePrefixMatched) {
         options.moduleName =
-          options.moduleName.substring(sourceBasePackage.length + 1);
+          options.moduleName.substring(stripPrefix.length + path.sep.length);
       }
-      if (distBasePackage) {
-        options.moduleName = distBasePackage + path.sep + options.moduleName;
+      var addPrefix = options.moduleNaming.addPrefix;
+      if (addPrefix) {
+        options.moduleName = addPrefix + path.sep + options.moduleName;
       }
     }
     compile(content, options, function (err, result) {
@@ -89,8 +89,18 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('traceur',
     'Compile ES6 JavaScript to ES5 JavaScript', function() {
       var options = this.options({
-        moduleNames: true
+        moduleNames: true,
+        moduleNaming: {
+          stripPrefix: "",
+          addPrefix: ""
+        }
       });
+      if (!options.moduleNaming.hasOwnProperty("stripPrefix")) {
+        options.moduleNaming.stripPrefix = "";
+      }
+      if (!options.moduleNaming.hasOwnProperty("addPrefix")) {
+        options.moduleNaming.addPrefix = "";
+      }
       grunt.log.debug('using options: ' + JSON.stringify(options));
       var done = this.async();
       // we use a flag so that every errors are printed out
@@ -107,10 +117,7 @@ module.exports = function(grunt) {
       delete options.spawn;
       Promise
         .all(this.files.map(function (group) {
-          var sourceBasePackage = options.sourceBasePackage || "";
-          var distBasePackage = options.distBasePackage || "";
-          return compileOne(grunt, compile, sourceBasePackage, distBasePackage,
-            group.src, group.dest, options)
+          return compileOne(grunt, compile, group.src, group.dest, options)
             .catch(function () {
               success = false;
             });

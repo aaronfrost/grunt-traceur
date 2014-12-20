@@ -21,8 +21,10 @@ module.exports = function(grunt) {
         sourceMaps: true,
         arrayComprehension: true,
         generatorComprehension: true,
-        sourceBasePackage: "test/fixtures",
-        distBasePackage: "test/tmp"
+        moduleNaming: {
+          stripPrefix: "test/fixtures",
+          addPrefix: "test/tmp"
+        }
         // traceur options here
       },
       test: {
