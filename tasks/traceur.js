@@ -38,6 +38,8 @@ function compileOne (grunt, compile, src, dest, options) {
     src = src[0];
     var content = grunt.file.read(src).toString('utf8');
     options.filename = src;
+    options.sourceName = src;
+    options.outputName = dest;
     if (options.moduleNames) {
       options.moduleName = [path.dirname(dest), path.sep, path.basename(dest, path.extname(dest))].join('');
     }
@@ -55,7 +57,6 @@ function compileOne (grunt, compile, src, dest, options) {
         if (options.sourceMaps) {
           sourceMapName = path.basename(src, path.extname(src)) + '.map';
           sourceMapPath = path.join(dest, '..',  sourceMapName);
-          result[0] += '//# sourceMappingURL=' + sourceMapName + '\n';
           grunt.file.write(sourceMapPath, result[1]);
           grunt.log.debug('SourceMap written to "' + sourceMapName + '"');
         }
