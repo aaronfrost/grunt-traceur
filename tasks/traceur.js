@@ -41,7 +41,8 @@ function compileOne (grunt, compile, src, dest, options) {
     options.sourceName = src;
     options.outputName = dest;
     if (options.moduleNames) {
-      options.moduleName = [path.dirname(dest), path.sep, path.basename(dest, path.extname(dest))].join('');
+      var modulePath = options.modulesPath || path.dirname(dest);
+      options.moduleName = [modulePath, path.sep, path.basename(dest, path.extname(dest))].join('');
     }
     compile(content, options, function (err, result) {
       var sourceMapName, sourceMapPath;
