@@ -53,7 +53,7 @@ function compileOne (grunt, compile, src, dest, options) {
           result[0] = fs.readFileSync(RUNTIME_PATH) + result[0];
         }
         if (options.sourceMaps) {
-          sourceMapName = path.basename(src) + '.map';
+          sourceMapName = path.basename(src, path.extname(src)) + '.map';
           sourceMapPath = path.join(dest, '..',  sourceMapName);
           result[0] += '//# sourceMappingURL=' + sourceMapName + '\n';
           grunt.file.write(sourceMapPath, result[1]);
