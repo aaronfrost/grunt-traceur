@@ -31,9 +31,11 @@ grunt.initConfig({
     options: {
       // traceur options here
       experimental: true,
-      // module naming options
-      sourceBasePackage: "src/es6",
-      distBasePackage: "com/mycompany/project"
+      // module naming options,
+      moduleNaming: {
+        stripPrefix: "src/es6",
+        addPrefix: "com/mycompany/project"
+      }
     },
     custom: {
       files: [{
