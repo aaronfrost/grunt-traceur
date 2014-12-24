@@ -32,8 +32,8 @@ function asyncCompile(content, options, callback) {
 function compileOne (grunt, compile, src, dest, options) {
   return new Promise(function (resolve, reject) {
     if (src.length > 1) {
-      reject(Error('source MUST be a single file OR multiple files using expand:true. ' +
-        'Check out the README.'));
+      reject(Error('source MUST be a single file OR multiple files using ' +
+        'expand:true. Check out the README.'));
     }
     src = src[0];
     var content = grunt.file.read(src).toString('utf8');
@@ -41,8 +41,24 @@ function compileOne (grunt, compile, src, dest, options) {
     options.sourceName = src;
     options.outputName = dest;
     if (options.moduleNames) {
-      var modulePath = options.modulesPath || path.dirname(dest);
-      options.moduleName = [modulePath, path.sep, path.basename(dest, path.extname(dest))].join('');
+      options.moduleName = [
+        path.dirname(dest),
+        path.sep,
+        path.basename(dest, path.extname(dest))
+      ].join('');
+      var stripPrefix = options.moduleNaming.stripPrefix;
+      if (stripPrefix) {
+        var namePrefixMatched = (stripPrefix + path.sep) ===
+          options.moduleName.substring(0, stripPrefix.length + path.sep.length);
+        if (namePrefixMatched) {
+          options.moduleName =
+            options.moduleName.substring(stripPrefix.length + path.sep.length);
+        }
+      }
+      var addPrefix = options.moduleNaming.addPrefix;
+      if (addPrefix) {
+        options.moduleName = addPrefix + path.sep + options.moduleName;
+      }
     }
     compile(content, options, function (err, result) {
       var sourceMapName, sourceMapPath;
@@ -76,7 +92,11 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('traceur',
     'Compile ES6 JavaScript to ES5 JavaScript', function() {
       var options = this.options({
-        moduleNames: true
+        moduleNames: true,
+        moduleNaming: {
+          stripPrefix: "",
+          addPrefix: ""
+        }
       });
       grunt.log.debug('using options: ' + JSON.stringify(options));
       var done = this.async();

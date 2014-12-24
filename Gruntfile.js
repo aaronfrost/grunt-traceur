@@ -20,7 +20,11 @@ module.exports = function(grunt) {
         modules: 'commonjs',
         sourceMaps: true,
         arrayComprehension: true,
-        generatorComprehension: true
+        generatorComprehension: true,
+        moduleNaming: {
+          stripPrefix: "test/tmp",
+          addPrefix: "test/fixtures"
+        }
         // traceur options here
       },
       test: {
