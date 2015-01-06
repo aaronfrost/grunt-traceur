@@ -58,7 +58,7 @@ Some common options:
 
 * `experimental` - Turn on all experimental features
 * `blockBinding` - Turn on support for `let` and `const`
-* `includeRuntime` - Prepend runtime to output. If you choose `false` (default value) you'll have to preload the traceur runtime make your code work.
+* `includeRuntime` - Prepend runtime to output. If you choose `false` (default value) you'll have to preload the traceur runtime to make your code work.
 * `moduleNames` - Generate named module (default: true)
 * `moduleNaming.stripPrefix` - Strip the specified prefix from generated module names
 * `moduleNaming.addPrefix` - Add the specified prefix to the generated module names (applied AFTER the `moduleNaming.stripPrefix` option)
