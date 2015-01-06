@@ -46,7 +46,8 @@
     "es6-promise": "^1.0.0"
   },
   "peerDependencies": {
-    "grunt": "^0.4.4"
+    "grunt": "^0.4.4",
+    "traceur": "0.0.79"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
