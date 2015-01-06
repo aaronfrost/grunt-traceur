@@ -24,7 +24,8 @@ module.exports = function(grunt) {
         moduleNaming: {
           stripPrefix: "test/tmp",
           addPrefix: "test/fixtures"
-        }
+        },
+        copyRuntime: "test/tmp"
         // traceur options here
       },
       test: {
@@ -38,6 +39,9 @@ module.exports = function(grunt) {
     },
     nodeunit: {
       tests: ['test/*_test.js']
+    },
+    clean: {
+      build: ["test/tmp"]
     }
 
   });
@@ -46,7 +50,11 @@ module.exports = function(grunt) {
   grunt.loadTasks('tasks');
 
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
-  grunt.registerTask('default', ['traceur', 'nodeunit']);
+  grunt.registerTask('default', ['clean:build', 'traceur', 'nodeunit', 'clean:build']);
+
+  //Same as default, but doesn't clean at the end, so that you can see the output.
+  grunt.registerTask('test', ['clean:build', 'traceur', 'nodeunit']);
 
 };
