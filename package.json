@@ -43,8 +43,7 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "es6-promise": "^1.0.0",
-    "traceur": "0.0.79"
+    "es6-promise": "^1.0.0"
   },
   "peerDependencies": {
     "grunt": "^0.4.4"
@@ -52,7 +51,8 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
-    "grunt-contrib-nodeunit": "^0.4.1"
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "traceur": "0.0.79"
   },
   "keywords": [
     "gruntplugin"
