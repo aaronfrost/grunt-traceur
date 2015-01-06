@@ -52,7 +52,8 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
-    "grunt-contrib-nodeunit": "^0.4.1"
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "traceur": "0.0.79"
   },
   "keywords": [
     "gruntplugin"
