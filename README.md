@@ -35,7 +35,8 @@ grunt.initConfig({
       moduleNaming: {
         stripPrefix: "src/es6",
         addPrefix: "com/mycompany/project"
-      }
+      },
+      copyRuntime: 'src/es5'
     },
     custom: {
       files: [{
@@ -58,7 +59,7 @@ Some common options:
 
 * `experimental` - Turn on all experimental features
 * `blockBinding` - Turn on support for `let` and `const`
-* `includeRuntime` - Prepend runtime to output
+* `copyRuntime` - Copies the traceur_runtime.js to the location which you specify here
 * `moduleNames` - Generate named module (default: true)
 * `moduleNaming.stripPrefix` - Strip the specified prefix from generated module names
 * `moduleNaming.addPrefix` - Add the specified prefix to the generated module names (applied AFTER the `moduleNaming.stripPrefix` option)

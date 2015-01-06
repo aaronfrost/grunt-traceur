@@ -7,6 +7,7 @@
 */
 
 'use strict';
+var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
 var compiler = require('../lib/compiler');
@@ -68,9 +69,6 @@ function compileOne (grunt, compile, src, dest, options) {
         grunt.log.error(err);
         reject(err);
       } else {
-        if (options.includeRuntime) {
-          result[0] = fs.readFileSync(RUNTIME_PATH) + result[0];
-        }
         if (options.sourceMaps) {
           sourceMapName = path.basename(src, path.extname(src)) + '.map';
           sourceMapPath = path.join(dest, '..',  sourceMapName);
@@ -116,6 +114,11 @@ module.exports = function(grunt) {
         grunt.log.error('none of the listed sources are valid');
         success = false;
       }
+
+      //Warn about deprecation of 'includeRuntime'
+      if(!_.isUndefined(options.includeRuntime)){
+        grunt.log.error('The use of \'includeRuntime\' has been deprecated in favor of \'copyRuntime\' as of grunt-traceur@0.5.1. The traceur_runtime.js was not included. Please update your options and retry.');
+      }
       Promise
         .all(this.files.map(function (group) {
           return compileOne(grunt, compile, group.src, group.dest, options)
@@ -125,8 +128,21 @@ module.exports = function(grunt) {
             });
         }))
         .then(function () {
+          var runtime, runtimeFilename;
           if (server) {
             server.stop();
+          }
+          if(!_.isUndefined(options.copyRuntime)){
+            if(_.isEmpty(options.copyRuntime)){
+              grunt.log.error('Unable to perform \'copyRuntime\' because the value is not specified.');
+              return;
+            }
+            runtime = fs.readFileSync(RUNTIME_PATH);
+            runtimeFilename = path.join(options.copyRuntime, 'traceur_runtime.js')
+            grunt.file.write(runtimeFilename, runtime, {
+              encoding: 'utf8'
+            });
+            grunt.log.ok('TRACEUR_RUNTIME.JS -> ' + runtimeFilename);
           }
           done(success);
         });
