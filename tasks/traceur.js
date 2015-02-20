@@ -33,8 +33,9 @@ function asyncCompile(content, options, callback) {
 function compileOne (grunt, compile, src, dest, options) {
   return new Promise(function (resolve, reject) {
     if (src.length > 1) {
-      reject(Error('source MUST be a single file OR multiple files using ' +
-        'expand:true. Check out the README.'));
+      var error = new Error('source MUST be a single file OR multiple files using ' +
+        'expand:true. Check out the README.');
+      reject(error.message);
     }
     src = src[0];
     var content = grunt.file.read(src).toString('utf8');
@@ -65,8 +66,6 @@ function compileOne (grunt, compile, src, dest, options) {
       var sourceMapName, sourceMapPath;
       if (err) {
         grunt.log.error(src + ' -> ' + dest);
-        grunt.log.error('ERRORS:');
-        grunt.log.error(err);
         reject(err);
       } else {
         if (options.sourceMaps) {
@@ -122,8 +121,9 @@ module.exports = function(grunt) {
       Promise
         .all(this.files.map(function (group) {
           return compileOne(grunt, compile, group.src, group.dest, options)
-            .catch(function (e) {
-              grunt.log.error(e.message);
+            .catch(function (err) {
+              grunt.log.error('ERRORS:');
+              grunt.log.error(err);
               success = false;
             });
         }))
