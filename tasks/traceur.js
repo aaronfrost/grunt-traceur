@@ -32,12 +32,6 @@ function asyncCompile(content, options, callback) {
 */
 function compileOne (grunt, compile, src, dest, options) {
   return new Promise(function (resolve, reject) {
-    if (src.length > 1) {
-      var error = new Error('source MUST be a single file OR multiple files using ' +
-        'expand:true. Check out the README.');
-      reject(error.message);
-    }
-    src = src[0];
     var content = grunt.file.read(src).toString('utf8');
     options.filename = src;
     options.sourceName = src;
@@ -120,7 +114,18 @@ module.exports = function(grunt) {
       }
       Promise
         .all(this.files.map(function (group) {
-          return compileOne(grunt, compile, group.src, group.dest, options)
+          var src, dest = group.dest;
+          if (group.src.length > 1) {
+            grunt.log.warn('Multiple sources detected. Contents will be concatenated before transpiling');
+            var contents = group.src.map(function (filepath) {
+              return grunt.file.read(filepath);
+            }).join(grunt.util.linefeed);
+            grunt.file.write(dest, contents);
+            src = dest;
+          } else {
+            src = group.src[0];
+          }
+          return compileOne(grunt, compile, src, dest, options)
             .catch(function (err) {
               grunt.log.error('ERRORS:');
               grunt.log.error(err);
