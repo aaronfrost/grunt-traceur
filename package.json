@@ -1,7 +1,7 @@
 {
   "name": "grunt-traceur",
   "description": "A grunt plugin for Google's Traceur-Compile, a lib to compile ES6 JavaScript into ES5 JavaScript.",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "homepage": "https://github.com/aaronfrost/grunt-traceur",
   "author": {
     "name": "Aaron Frost",
@@ -54,8 +54,7 @@
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-nodeunit": "^0.4.1",
-    "traceur": "0.0.79"
+    "grunt-contrib-nodeunit": "^0.4.1"
   },
   "keywords": [
     "gruntplugin"
