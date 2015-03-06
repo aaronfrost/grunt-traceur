@@ -55,7 +55,7 @@
     "grunt-cli": "^0.1.13",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-nodeunit": "^0.4.1",
-    "traceur": "0.0.79"
+    "traceur": "0.0.86"
   },
   "keywords": [
     "gruntplugin"
