@@ -39,9 +39,15 @@ function compileOne (grunt, compile, src, dest, options) {
     }
     src = src[0];
     var content = grunt.file.read(src).toString('utf8');
+
+    if(options.stripExtension){
+      dest = dest.replace(options.stripExtension, '');
+    }
+
     options.filename = src;
     options.sourceName = src;
     options.outputName = dest;
+
     if (options.moduleNames) {
       options.moduleName = [
         path.dirname(dest),
@@ -118,6 +124,16 @@ module.exports = function(grunt) {
       if(!_.isUndefined(options.includeRuntime)){
         grunt.log.error('The use of \'includeRuntime\' has been deprecated in favor of \'copyRuntime\' as of grunt-traceur@0.5.1. The traceur_runtime.js was not included. Please update your options and retry.');
       }
+
+      if(options.stripExtension){
+        if(options.stripExtension.charAt(0) !== '.'){
+          options.stripExtension = '.' + options.stripExtension;
+        }
+
+        options.stripExtension.replace(/\./g, '\\\\.')
+        options.stripExtension = new RegExp(options.stripExtension + '$', 'i');
+      }
+
       Promise
         .all(this.files.map(function (group) {
           return compileOne(grunt, compile, group.src, group.dest, options)
