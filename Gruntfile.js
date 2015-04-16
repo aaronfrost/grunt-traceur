@@ -22,8 +22,8 @@ module.exports = function(grunt) {
         arrayComprehension: true,
         generatorComprehension: true,
         moduleNaming: {
-          stripPrefix: "test/tmp",
-          addPrefix: "test/fixtures"
+          addPrefix: "test/tmp",
+          stripPrefix: "test/fixtures"
         },
         copyRuntime: "test/tmp"
         // traceur options here

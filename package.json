@@ -48,7 +48,7 @@
   },
   "peerDependencies": {
     "grunt": "^0.4.4",
-    "traceur": ">=0.0.60"
+    "traceur": ">=0.0.88"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

@@ -39,27 +39,22 @@ function compileOne (grunt, compile, src, dest, options) {
     }
     src = src[0];
     var content = grunt.file.read(src).toString('utf8');
-    options.filename = src;
+    options.filename = dest;
     options.sourceName = src;
     options.outputName = dest;
-    if (options.moduleNames) {
-      options.moduleName = [
-        path.dirname(dest),
-        path.sep,
-        path.basename(dest, path.extname(dest))
-      ].join('');
+    if (options.moduleNaming) {
+      var addPrefix = options.moduleNaming.addPrefix;
       var stripPrefix = options.moduleNaming.stripPrefix;
       if (stripPrefix) {
         var namePrefixMatched = (stripPrefix + path.sep) ===
-          options.moduleName.substring(0, stripPrefix.length + path.sep.length);
+          options.sourceName.substring(0, stripPrefix.length + path.sep.length);
         if (namePrefixMatched) {
-          options.moduleName =
-            options.moduleName.substring(stripPrefix.length + path.sep.length);
+          options.sourceName =
+            options.sourceName.substring(stripPrefix.length + path.sep.length);
         }
       }
-      var addPrefix = options.moduleNaming.addPrefix;
       if (addPrefix) {
-        options.moduleName = addPrefix + path.sep + options.moduleName;
+        options.sourceName = addPrefix + path.sep + options.sourceName;
       }
     }
     compile(content, options, function (err, result) {
