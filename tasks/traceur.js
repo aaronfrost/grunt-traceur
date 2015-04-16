@@ -40,7 +40,7 @@ function compileOne (grunt, compile, src, dest, options) {
     src = src[0];
     var content = grunt.file.read(src).toString('utf8');
     options.filename = dest;
-    options.sourceName = src;
+    options.sourceName = dest;
     options.outputName = dest;
     if (options.moduleNaming) {
       var addPrefix = options.moduleNaming.addPrefix;
