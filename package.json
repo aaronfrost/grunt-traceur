@@ -47,7 +47,7 @@
     "lodash": "^2.4.1"
   },
   "peerDependencies": {
-    "grunt": "^0.4.4",
+    "grunt": ">=0.4.0",
     "traceur": ">=0.0.88"
   },
   "devDependencies": {
