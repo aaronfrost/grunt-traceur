@@ -46,7 +46,7 @@ function compileOne (grunt, compile, src, dest, options) {
       var addPrefix = options.moduleNaming.addPrefix;
       var stripPrefix = options.moduleNaming.stripPrefix;
       if (stripPrefix) {
-        var namePrefixMatched = (stripPrefix + path.sep) ===
+        var namePrefixMatched = (stripPrefix + '/') ===
           options.sourceName.substring(0, stripPrefix.length + path.sep.length);
         if (namePrefixMatched) {
           options.sourceName =
