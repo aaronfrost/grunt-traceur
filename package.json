@@ -51,7 +51,7 @@
     "traceur": ">=0.0.88"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
+    "grunt": "^1.5.2",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-nodeunit": "^0.4.1"
